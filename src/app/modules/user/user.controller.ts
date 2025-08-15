@@ -1,38 +1,49 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { UserServices } from "./user.services";
-import AppError from "../../errorHelpers/AppError";
-const CreateUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    // throw new AppError(httpStatus.BAD_REQUEST, "fake Error");
-    const user = await UserServices.CreateUser(req.body);
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 
-    res.status(httpStatus.CREATED).json({
-      message: "User created successfully",
-      user,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    next(error);
-  }
-};
-
-// const GetAllUsers = async (req: Request, res: Response) => {
+// const CreateUser = async (req: Request, res: Response, next: NextFunction) => {
 //   try {
-//     const result = await User.find();
-//     res.status(200).json({
-//       message: "All Users get Successfully",
-//       data: result,
-//     });
-//   } catch (error) {
+//     const user = await UserServices.CreateUser(req.body);
+
 //     res.status(httpStatus.CREATED).json({
-//       message: `Something went wrong!! ${error.message}`,
-//       error,
+//       message: "User created successfully",
+//       user,
 //     });
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   } catch (error: any) {
+//     next(error);
 //   }
 // };
+const CreateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserServices.CreateUser(req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: user,
+      message: "User created successfully",
+    });
+  }
+);
+const GetAllUsers = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await UserServices.GetAllUsers();
+    sendResponse(res, {
+      success: true,
+      message: "All Users Retrieved Successfully",
+      statusCode: httpStatus.CREATED,
+      data: result.data,
+      meta: result.meta,
+    });
+  }
+);
 
 export const userController = {
   CreateUser,
-  // GetAllUsers,
+  GetAllUsers,
 };
