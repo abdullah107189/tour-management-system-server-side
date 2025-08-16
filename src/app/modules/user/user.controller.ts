@@ -5,19 +5,6 @@ import { UserServices } from "./user.services";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 
-// const CreateUser = async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const user = await UserServices.CreateUser(req.body);
-
-//     res.status(httpStatus.CREATED).json({
-//       message: "User created successfully",
-//       user,
-//     });
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   } catch (error: any) {
-//     next(error);
-//   }
-// };
 const CreateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserServices.CreateUser(req.body);
