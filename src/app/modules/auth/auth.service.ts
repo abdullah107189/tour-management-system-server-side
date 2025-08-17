@@ -3,7 +3,8 @@ import AppError from "../../errorHelpers/AppError";
 import { IUser } from "../user/user.interface";
 import httpStatus from "http-status-codes";
 import { User } from "../user/user.model";
-import jwt from "jsonwebtoken";
+import { generateToken } from "../../utils/jwt";
+import { envVars } from "../../config/env";
 const credentialsLogin = async (payload: Partial<IUser>) => {
   const { email, password } = payload;
   const existingUser = await User.findOne({ email });
@@ -22,7 +23,11 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     email: existingUser.email,
     role: existingUser.role,
   };
-  const accessToken = jwt.sign(jwtPayload, "secretCode", { expiresIn: "1d" });
+  const accessToken = generateToken(
+    jwtPayload,
+    envVars.jwt_secret,
+    envVars.jwt_expires
+  );
   return { accessToken };
 };
 export const AuthServices = {
