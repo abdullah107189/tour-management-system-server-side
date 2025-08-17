@@ -3,6 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import { envVars } from "./app/config/env";
+import { seedSuperAdmin } from "./app/utils/seedSuperAdmin";
 let server: Server;
 
 const startServer = async () => {
@@ -17,10 +18,13 @@ const startServer = async () => {
       console.log(`server is listening on the port : ${envVars.PORT}`);
     });
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };
-startServer();
+(async () => {
+  await startServer();
+  await seedSuperAdmin();
+})();
 
 // when promise rejection error
 process.on("unhandledRejection", (err) => {
