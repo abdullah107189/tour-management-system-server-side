@@ -88,5 +88,4 @@ export const UserServices = {
   CreateUser,
   GetAllUsers,
   UpdateUser,
-  UpdateUser,
 };
