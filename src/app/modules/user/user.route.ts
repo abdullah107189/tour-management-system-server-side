@@ -7,8 +7,6 @@ import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "./user.interface";
 const router = Router();
 
-
-
 router.post(
   "/register",
   validateRequest(createUserZodSchema),
@@ -19,5 +17,9 @@ router.get(
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   userController.GetAllUsers
 );
-
+router.patch(
+  "/:id",
+  checkAuth(...Object.values(Role)),
+  userController.UpdateUser
+);
 export const UserRoutes = router;
