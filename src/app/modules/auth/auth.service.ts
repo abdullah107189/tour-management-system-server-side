@@ -10,6 +10,7 @@ import {
 } from "../../utils/userTokens";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
+// ==================
 const credentialsLogin = async (payload: Partial<IUser>) => {
   const { email, password } = payload;
   const existingUser = await User.findOne({ email });
