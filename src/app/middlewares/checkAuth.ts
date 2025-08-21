@@ -3,7 +3,9 @@ import AppError from "../errorHelpers/AppError";
 import { envVars } from "../config/env";
 import { verifyToken } from "../utils/jwt";
 import { JwtPayload } from "jsonwebtoken";
-
+import httpStatus from "http-status-codes";
+import { User } from "../modules/user/user.model";
+import { IsActive } from "../modules/user/user.interface";
 export const checkAuth =
   (...authRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +21,26 @@ export const checkAuth =
       if (!verifiedToken) {
         throw new AppError(403, "You are not authorized");
       }
-      // console.log(verifiedToken);
+
+      const existingUser = await User.findOne({
+        email: verifiedToken.email,
+      });
+      if (!existingUser) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Email don't exists.");
+      }
+      if (existingUser.isDeleted) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User is Deleted");
+      }
+      if (
+        existingUser.isActive === IsActive.BLOCKED ||
+        existingUser.isActive === IsActive.INACTIVE
+      ) {
+        throw new AppError(
+          httpStatus.BAD_REQUEST,
+          `User is ${existingUser.isActive}`
+        );
+      }
+
       if (!authRoles.includes(verifiedToken.role)) {
         throw new AppError(403, "You are not permitted to view this role!!!");
       }

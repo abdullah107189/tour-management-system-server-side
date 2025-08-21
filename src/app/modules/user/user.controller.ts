@@ -40,7 +40,7 @@ const UpdateUser = catchAsync(
     const result = await UserServices.UpdateUser(
       userId,
       payload,
-      verifiedToken
+      verifiedToken as JwtPayload
     );
     sendResponse(res, {
       success: true,

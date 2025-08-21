@@ -10,6 +10,13 @@ interface IEnvVariables {
   bcrypt_salt_round: string;
   super_admin_email: string;
   super_admin_pass: string;
+  jwt_refresh_secret: string;
+  jwt_refresh_expires: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  GOOGLE_CALLBACK_URL: string;
+  EXPRESS_SESSION_SECRET: string;
+  FRONTEND_URL: string;
 }
 
 const loadEnvVariables = (): IEnvVariables => {
@@ -22,6 +29,13 @@ const loadEnvVariables = (): IEnvVariables => {
     "bcrypt_salt_round",
     "super_admin_email",
     "super_admin_pass",
+    "jwt_refresh_secret",
+    "jwt_refresh_expires",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GOOGLE_CALLBACK_URL",
+    "EXPRESS_SESSION_SECRET",
+    "FRONTEND_URL",
   ];
   requiredEnvVariables.forEach((key) => {
     if (!process.env[key]) {
@@ -37,6 +51,13 @@ const loadEnvVariables = (): IEnvVariables => {
     bcrypt_salt_round: process.env.bcrypt_salt_round as string,
     super_admin_email: process.env.super_admin_email as string,
     super_admin_pass: process.env.super_admin_pass as string,
+    jwt_refresh_secret: process.env.jwt_refresh_secret as string,
+    jwt_refresh_expires: process.env.jwt_refresh_expires as string,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
+    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
+    EXPRESS_SESSION_SECRET: process.env.EXPRESS_SESSION_SECRET as string,
+    FRONTEND_URL: process.env.FRONTEND_URL as string,
   };
 };
 export const envVars = loadEnvVariables();

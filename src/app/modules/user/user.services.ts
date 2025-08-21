@@ -29,6 +29,8 @@ const CreateUser = async (payload: Partial<IUser>) => {
   });
   return user;
 };
+
+
 const GetAllUsers = async () => {
   const users = await User.find({});
   const totalCount = await User.countDocuments();
