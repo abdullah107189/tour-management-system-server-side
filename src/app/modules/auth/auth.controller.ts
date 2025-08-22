@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
-import { AuthServices } from "./auth.service";
+import { AuthServices } from "./auth.services";
 import AppError from "../../errorHelpers/AppError";
 import { envVars } from "../../config/env";
 import { setAuthCookie } from "../../utils/setCookie";
