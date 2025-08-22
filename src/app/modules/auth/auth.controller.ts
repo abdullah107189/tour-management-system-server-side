@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
-import { AuthServices } from "./auth.service";
+import { AuthServices } from "./auth.services";
 import AppError from "../../errorHelpers/AppError";
 import { envVars } from "../../config/env";
 import { setAuthCookie } from "../../utils/setCookie";
@@ -12,22 +12,37 @@ import { JwtPayload } from "jsonwebtoken";
 import { createTokens } from "../../utils/userTokens";
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const loginInfo = await AuthServices.credentialsLogin(req.body);
+    // const loginInfo = await AuthServices.credentialsLogin(req.body);
 
-    setAuthCookie(res, loginInfo);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    passport.authenticate("local", async (err: any, user: any, info: any) => {
+      if (err) {
+        return next(new AppError(401, info.message));
+      }
+      if (!user) {
+        return next(new AppError(401, info.message));
+      }
+      const userToken = createTokens(user);
 
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.CREATED,
-      data: loginInfo,
-      message: "User Logged In Successfully",
-    });
+      const { password: pass, ...rest } = user.toObject();
+
+      setAuthCookie(res, userToken);
+      sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.CREATED,
+        data: {
+          accessToken: userToken.accessToken,
+          refreshToken: userToken.refreshToken,
+          user: rest,
+        },
+        message: "User Logged In Successfully",
+      });
+    })(req, res, next);
   }
 );
 const getNewAccessToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
-    console.log("refreshToken", refreshToken);
     if (!refreshToken) {
       throw new AppError(httpStatus.BAD_REQUEST, "No Refresh Token Provided!");
     }
@@ -92,7 +107,7 @@ const googleCallbackController = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     let state = req.query.state ? (req.query.state as string) : "";
     if (state.startsWith("/")) {
-      state = state.slice(1)
+      state = state.slice(1);
     }
     const user = req.user;
     if (!user) {

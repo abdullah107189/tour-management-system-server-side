@@ -4,14 +4,11 @@ import httpStatus from "http-status-codes";
 import { UserServices } from "./user.services";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
-import { verifyToken } from "../../utils/jwt";
-import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 
 const CreateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserServices.CreateUser(req.body);
-
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,

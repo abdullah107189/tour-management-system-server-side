@@ -53,7 +53,6 @@ export const createNewAccessTokenWithRefreshToken = async (
       `User is ${existingUser.isActive}`
     );
   }
-  console.log(existingUser);
   const jwtPayload = {
     userId: existingUser._id,
     email: existingUser.email,
