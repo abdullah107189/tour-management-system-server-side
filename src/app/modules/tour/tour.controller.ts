@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import { TourServices } from "./tour.services";
+// =========================| Tour Type |==========================
 const createTourType = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await TourServices.createTourType(req.body);
@@ -47,9 +48,28 @@ const deleteTourType = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+// ====================| tour |=================
+
+const createTour = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await TourServices.createTour(req.body);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Tour created successfully",
+    });
+  }
+);
+
 export const TourController = {
+  // tour types
   createTourType,
   getAllTourTypes,
   updateTourType,
   deleteTourType,
+
+  //   tour
+  createTour,
 };
