@@ -12,4 +12,9 @@ router.post(
   validateRequest(createDivisionZodSchema),
   divisionController.createDivision
 );
+router.get(
+  "/",
+  checkAuth(...Object.values(Role)),
+  divisionController.getAllDivision
+);
 export const DivisionRoutes = router;
