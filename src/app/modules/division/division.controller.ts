@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { divisionServices } from "./division.services";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
+import { JwtPayload } from "jsonwebtoken";
 
 const createDivision = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +28,26 @@ const getAllDivision = catchAsync(
     });
   }
 );
+const updateDivision = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const id = req.params.id;
+    const verifiedToken = req.user;
+    const result = await divisionServices.updateDivision(
+      id,
+      payload,
+      verifiedToken as JwtPayload
+    );
+    sendResponse(res, {
+      success: true,
+      message: "Division Created Successful",
+      statusCode: httpStatus.CREATED,
+      data: result,
+    });
+  }
+);
 export const divisionController = {
   createDivision,
   getAllDivision,
+  updateDivision,
 };

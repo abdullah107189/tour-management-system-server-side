@@ -17,4 +17,9 @@ router.get(
   checkAuth(...Object.values(Role)),
   divisionController.getAllDivision
 );
+router.patch(
+  "/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  divisionController.updateDivision
+);
 export const DivisionRoutes = router;
