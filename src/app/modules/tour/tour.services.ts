@@ -74,6 +74,10 @@ const updateTour = async (id: string, payload: ITour) => {
   });
   return updateTourType;
 };
+
+const deleteTour = async (id: string) => {
+  return await Tour.findByIdAndDelete(id);
+};
 export const TourServices = {
   // tour types
   createTourType,
@@ -85,4 +89,5 @@ export const TourServices = {
   getAllTour,
   getSingleTour,
   updateTour,
+  deleteTour,
 };
