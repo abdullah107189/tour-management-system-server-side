@@ -62,7 +62,17 @@ const createTour = catchAsync(
     });
   }
 );
-
+const getAllTour = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await TourServices.getAllTour();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Tours retrieved successfully",
+    });
+  }
+);
 export const TourController = {
   // tour types
   createTourType,
@@ -72,4 +82,5 @@ export const TourController = {
 
   //   tour
   createTour,
+  getAllTour,
 };

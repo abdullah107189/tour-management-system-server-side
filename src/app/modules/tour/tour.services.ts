@@ -45,6 +45,15 @@ const createTour = async (payload: ITour) => {
   }
   return await Tour.create(payload);
 };
+
+const getAllTour = async () => {
+  const result = await Tour.find({});
+  const totalTourTypes = await Tour.countDocuments();
+  return {
+    data: result,
+    meta: totalTourTypes,
+  };
+};
 export const TourServices = {
   // tour types
   createTourType,
@@ -53,4 +62,5 @@ export const TourServices = {
   deleteTourType,
   //   tour
   createTour,
+  getAllTour,
 };
