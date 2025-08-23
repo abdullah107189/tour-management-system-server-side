@@ -61,13 +61,20 @@ const updateDivision = async (
 };
 const getSingleDivision = async (slug: string) => {
   const division = await Division.findOne({ slug });
-  return division;
-  
-};
 
+  if (division == null) {
+    throw new AppError(httpStatus.NOT_FOUND, "Not Found.");
+  }
+  return division;
+};
+const deleteDivision = async (id: string) => {
+  await Division.findByIdAndDelete(id);
+  return null;
+};
 export const divisionServices = {
   createDivision,
   getAllDivision,
   updateDivision,
   getSingleDivision,
+  deleteDivision,
 };
