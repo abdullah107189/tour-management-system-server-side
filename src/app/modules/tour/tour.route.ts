@@ -15,6 +15,12 @@ router.post(
 );
 
 router.get("/tour-types", TourController.getAllTourTypes);
+router.patch(
+  "/tour-types/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  validateRequest(createTourTypeZodSchema),
+  TourController.updateTourType
+);
 
 // router.patch("/tour-types/:id");
 // router.delete("/tour-types/:id");
