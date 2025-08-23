@@ -17,6 +17,11 @@ router.get(
   checkAuth(...Object.values(Role)),
   divisionController.getAllDivision
 );
+router.get(
+  "/:slug",
+  checkAuth(...Object.values(Role)),
+  divisionController.getSingleDivision
+);
 router.patch(
   "/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),

@@ -6,12 +6,22 @@ import httpStatus from "http-status-codes";
 import { Role } from "../user/user.interface";
 
 const createDivision = async (payload: Partial<IDivision>) => {
+  const existingDivision = await Division.findOne({ name: payload.name });
+  if (existingDivision) {
+    throw new Error("A division with this name already exists.");
+  }
   const result = await Division.create(payload);
   return result;
 };
 const getAllDivision = async () => {
   const result = await Division.find();
-  return result;
+  const totalDivisions = await Division.countDocuments();
+  return {
+    data: result,
+    meta: {
+      total: totalDivisions,
+    },
+  };
 };
 const updateDivision = async (
   id: string,
@@ -49,8 +59,15 @@ const updateDivision = async (
 
   return updateDivision;
 };
+const getSingleDivision = async (slug: string) => {
+  const division = await Division.findOne({ slug });
+  return division;
+  
+};
+
 export const divisionServices = {
   createDivision,
   getAllDivision,
   updateDivision,
+  getSingleDivision,
 };
