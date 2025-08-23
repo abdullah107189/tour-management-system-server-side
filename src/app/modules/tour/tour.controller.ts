@@ -15,6 +15,18 @@ const createTourType = catchAsync(
     });
   }
 );
+const getAllTourTypes = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await TourServices.getAllTourTypes();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      data: result,
+      message: "Tour Type All Get successfully",
+    });
+  }
+);
 export const TourController = {
   createTourType,
+  getAllTourTypes,
 };

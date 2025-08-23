@@ -14,7 +14,8 @@ router.post(
   TourController.createTourType
 );
 
-// router.get("/tour-types");
+router.get("/tour-types", TourController.getAllTourTypes);
+
 // router.patch("/tour-types/:id");
 // router.delete("/tour-types/:id");
 

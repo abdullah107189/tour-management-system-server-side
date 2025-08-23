@@ -8,6 +8,15 @@ const createTourType = async (payload: ITourType) => {
   }
   return await TourType.create(payload);
 };
+const getAllTourTypes = async () => {
+  const result = await TourType.find({});
+  const totalTourTypes = await TourType.countDocuments();
+  return {
+    data: result,
+    meta: totalTourTypes,
+  };
+};
 export const TourServices = {
   createTourType,
+  getAllTourTypes,
 };
