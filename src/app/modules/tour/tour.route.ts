@@ -38,6 +38,11 @@ router.post(
   TourController.createTour
 );
 router.get("/", checkAuth(...Object.values(Role)), TourController.getAllTour);
+router.delete(
+  "/:id",
+  checkAuth(...Object.values(Role)),
+  TourController.getSingleTour
+);
 // router.patch("/:id");
 // router.delete("/:id");
 

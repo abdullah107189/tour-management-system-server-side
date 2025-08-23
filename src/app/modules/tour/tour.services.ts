@@ -54,6 +54,14 @@ const getAllTour = async () => {
     meta: totalTourTypes,
   };
 };
+const getSingleTour = async (id: string) => {
+  const isFind = await Tour.findById(id);
+  if (!isFind) {
+    throw new Error("Tour don't exists.");
+  }
+  await Tour.findByIdAndDelete(id);
+  return null;
+};
 export const TourServices = {
   // tour types
   createTourType,
@@ -63,4 +71,5 @@ export const TourServices = {
   //   tour
   createTour,
   getAllTour,
+  getSingleTour,
 };
