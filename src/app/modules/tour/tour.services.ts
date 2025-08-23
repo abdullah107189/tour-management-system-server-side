@@ -18,6 +18,7 @@ const getAllTourTypes = async () => {
     meta: totalTourTypes,
   };
 };
+
 const updateTourType = async (id: string, payload: ITourType) => {
   const existingTourType = await TourType.findById(id);
   if (!existingTourType) {
@@ -62,6 +63,17 @@ const getSingleTour = async (id: string) => {
   await Tour.findByIdAndDelete(id);
   return null;
 };
+
+const updateTour = async (id: string, payload: ITour) => {
+  const existingTourType = await Tour.findById(id);
+  if (!existingTourType) {
+    throw new Error("Tour not found");
+  }
+  const updateTourType = await Tour.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+  return updateTourType;
+};
 export const TourServices = {
   // tour types
   createTourType,
@@ -72,4 +84,5 @@ export const TourServices = {
   createTour,
   getAllTour,
   getSingleTour,
+  updateTour,
 };

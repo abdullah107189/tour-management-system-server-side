@@ -5,6 +5,7 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import {
   createTourTypeZodSchema,
   createTourZodSchema,
+  updateTourZodSchema,
 } from "./tour.validation";
 import { TourController } from "./tour.controller";
 
@@ -43,7 +44,12 @@ router.delete(
   checkAuth(...Object.values(Role)),
   TourController.getSingleTour
 );
-// router.patch("/:id");
+router.patch(
+  "/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  validateRequest(updateTourZodSchema),
+  TourController.updateTour
+);
 // router.delete("/:id");
 
 export const TourRoutes = router;
