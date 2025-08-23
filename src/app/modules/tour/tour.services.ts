@@ -26,8 +26,16 @@ const updateTourType = async (id: string, payload: ITourType) => {
   });
   return updateTourType;
 };
+const deleteTourType = async (id: string) => {
+  const existingTourType = await TourType.findById(id);
+  if (!existingTourType) {
+    throw new Error("Tour type not found.");
+  }
+  return await TourType.findByIdAndDelete(id);
+};
 export const TourServices = {
   createTourType,
   getAllTourTypes,
   updateTourType,
+  deleteTourType,
 };

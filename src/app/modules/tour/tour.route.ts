@@ -21,9 +21,11 @@ router.patch(
   validateRequest(createTourTypeZodSchema),
   TourController.updateTourType
 );
-
-// router.patch("/tour-types/:id");
-// router.delete("/tour-types/:id");
+router.delete(
+  "/tour-types/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  TourController.deleteTourType
+);
 
 // // ================== tour routes ===============
 // router.post("/create");
