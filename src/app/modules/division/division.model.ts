@@ -37,7 +37,7 @@ divisionSchema.pre("findOneAndUpdate", async function (next) {
     }
     division.slug = slug;
   }
-  this.setUpdate(division)
+  this.setUpdate(division);
   next();
 });
 export const Division = model<IDivision>("Division", divisionSchema);

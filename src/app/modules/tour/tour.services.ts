@@ -1,3 +1,4 @@
+import { tourSearchableFields } from "./tour.constant";
 import { ITour, ITourType } from "./tour.interface";
 import { Tour, TourType } from "./tour.model";
 
@@ -45,13 +46,21 @@ const createTour = async (payload: ITour) => {
   if (existingTourType) {
     throw new Error("Tour slug already exists.");
   }
-
   const result = await Tour.create(payload);
   return result;
 };
 
-const getAllTour = async () => {
-  const result = await Tour.find({});
+const getAllTours = async (query: Record<string, string>) => {
+  const filter = query;
+  const searchTerm = query.searchTerm || "";
+
+  const searchQuery = {
+    $or: tourSearchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: "i" },
+    })),
+  };
+  delete filter['searchTerm']
+  const result = await Tour.find(searchQuery).find(filter);
   const totalTourTypes = await Tour.countDocuments();
   return {
     data: result,
@@ -89,7 +98,7 @@ export const TourServices = {
   deleteTourType,
   //   tour
   createTour,
-  getAllTour,
+  getAllTours,
   getSingleTour,
   updateTour,
   deleteTour,

@@ -38,7 +38,7 @@ router.post(
   validateRequest(createTourZodSchema),
   TourController.createTour
 );
-router.get("/", checkAuth(...Object.values(Role)), TourController.getAllTour);
+router.get("/", checkAuth(...Object.values(Role)), TourController.getAllTours);
 router.get(
   "/:id",
   checkAuth(...Object.values(Role)),

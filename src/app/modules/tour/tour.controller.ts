@@ -61,9 +61,12 @@ const createTour = catchAsync(
     });
   }
 );
-const getAllTour = catchAsync(
+const getAllTours = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await TourServices.getAllTour();
+    const query = req.query;
+    const result = await TourServices.getAllTours(
+      query as Record<string, string>
+    );
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
@@ -116,7 +119,7 @@ export const TourController = {
 
   //   tour
   createTour,
-  getAllTour,
+  getAllTours,
   getSingleTour,
   updateTour,
   deleteTour,
