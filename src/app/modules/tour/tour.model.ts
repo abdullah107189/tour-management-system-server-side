@@ -13,7 +13,7 @@ export const TourType = model<ITourType>("TourType", tourTypeSchema);
 const tourSchema = new Schema<ITour>(
   {
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true },
     description: { type: String },
     images: { type: [String], default: [] },
     location: { type: String },
@@ -45,8 +45,7 @@ const tourSchema = new Schema<ITour>(
 
 tourSchema.pre("save", async function (next) {
   if (this.isModified("title")) {
-    const subSlug = this.title?.toLocaleLowerCase().split(" ").join("-");
-    let slug = `${subSlug}-division`;
+    let slug = this.title?.toLocaleLowerCase().split(" ").join("-");
     let counter = 0;
     while (await Tour.exists({ slug })) {
       slug = `${slug}-${counter++}`;
@@ -60,7 +59,7 @@ tourSchema.pre("findOneAndUpdate", async function (next) {
   const tour = this.getUpdate() as Partial<ITour>;
   if (tour.title) {
     const subSlug = tour.title?.toLocaleLowerCase().split(" ").join("-");
-    let slug = `${subSlug}-division`;
+    let slug = `${subSlug}`;
     let counter = 0;
     while (await Tour.exists({ slug })) {
       slug = `${slug}-${counter++}`;

@@ -1,4 +1,3 @@
-import { createSlug } from "../../utils/createSlug";
 import { ITour, ITourType } from "./tour.interface";
 import { Tour, TourType } from "./tour.model";
 
@@ -46,7 +45,9 @@ const createTour = async (payload: ITour) => {
   if (existingTourType) {
     throw new Error("Tour slug already exists.");
   }
-  return await Tour.create(slugWithPayload);
+
+  const result = await Tour.create(payload);
+  return result;
 };
 
 const getAllTour = async () => {
