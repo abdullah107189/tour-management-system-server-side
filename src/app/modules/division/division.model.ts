@@ -13,4 +13,31 @@ const divisionSchema = new Schema<IDivision>(
     versionKey: false,
   }
 );
+divisionSchema.pre("save", async function (next) {
+  if (this.isModified("name")) {
+    const subSlug = this.name?.toLocaleLowerCase().split(" ").join("-");
+    let slug = `${subSlug}-division`;
+    let counter = 0;
+    while (await Division.exists({ slug })) {
+      slug = `${slug}-${counter++}`;
+    }
+    this.slug = slug;
+    return this;
+  }
+  next();
+});
+divisionSchema.pre("findOneAndUpdate", async function (next) {
+  const division = this.getUpdate() as Partial<IDivision>;
+  if (division.name) {
+    const subSlug = division.name?.toLocaleLowerCase().split(" ").join("-");
+    let slug = `${subSlug}-division`;
+    let counter = 0;
+    while (await Division.exists({ slug })) {
+      slug = `${slug}-${counter++}`;
+    }
+    division.slug = slug;
+  }
+  this.setUpdate(division)
+  next();
+});
 export const Division = model<IDivision>("Division", divisionSchema);

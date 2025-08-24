@@ -46,7 +46,6 @@ const createTour = async (payload: ITour) => {
   if (existingTourType) {
     throw new Error("Tour slug already exists.");
   }
-  const slugWithPayload = await createSlug(payload, payload.title);
   return await Tour.create(slugWithPayload);
 };
 
@@ -71,10 +70,6 @@ const updateTour = async (id: string, payload: ITour) => {
   const existingTourType = await Tour.findById(id);
   if (!existingTourType) {
     throw new Error("Tour not found");
-  }
-  if (payload.title) {
-    const slugWithPayload = await createSlug(payload, payload.title as string);
-    payload = slugWithPayload;
   }
   const updateTourType = await Tour.findByIdAndUpdate(id, payload, {
     new: true,
