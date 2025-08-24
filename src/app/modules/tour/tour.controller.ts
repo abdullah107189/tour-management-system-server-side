@@ -77,13 +77,13 @@ const getAllTours = catchAsync(
 );
 const getSingleTour = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const result = await TourServices.getSingleTour(id);
+    const slug = req.params.slug;
+    const result = await TourServices.getSingleTour(slug);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       data: result,
-      message: "Tour Deleted successfully",
+      message: "Tour Get successfully",
     });
   }
 );

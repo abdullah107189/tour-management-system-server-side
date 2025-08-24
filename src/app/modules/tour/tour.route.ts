@@ -40,7 +40,7 @@ router.post(
 );
 router.get("/", checkAuth(...Object.values(Role)), TourController.getAllTours);
 router.get(
-  "/:id",
+  "/:slug",
   checkAuth(...Object.values(Role)),
   TourController.getSingleTour
 );

@@ -103,13 +103,12 @@ const getAllTours = async (query: Record<string, string>) => {
   };
 };
 
-const getSingleTour = async (id: string) => {
-  const isFind = await Tour.findById(id);
+const getSingleTour = async (slug: string) => {
+  const isFind = await Tour.findOne({ slug });
   if (!isFind) {
     throw new Error("Tour don't exists.");
   }
-  await Tour.findByIdAndDelete(id);
-  return null;
+  return isFind;
 };
 
 const updateTour = async (id: string, payload: ITour) => {
@@ -124,6 +123,10 @@ const updateTour = async (id: string, payload: ITour) => {
 };
 
 const deleteTour = async (id: string) => {
+  const isFind = await Tour.findById(id);
+  if (!isFind) {
+    throw new Error("Tour don't exists.");
+  }
   return await Tour.findByIdAndDelete(id);
 };
 export const TourServices = {
