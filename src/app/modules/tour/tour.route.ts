@@ -39,7 +39,7 @@ router.post(
   TourController.createTour
 );
 router.get("/", checkAuth(...Object.values(Role)), TourController.getAllTour);
-router.delete(
+router.get(
   "/:id",
   checkAuth(...Object.values(Role)),
   TourController.getSingleTour

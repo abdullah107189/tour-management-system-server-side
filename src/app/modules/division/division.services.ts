@@ -4,14 +4,16 @@ import { IDivision } from "./division.interface";
 import { Division } from "./division.model";
 import httpStatus from "http-status-codes";
 import { Role } from "../user/user.interface";
+import { createSlug } from "../../utils/createSlug";
 
 const createDivision = async (payload: Partial<IDivision>) => {
   const existingDivision = await Division.findOne({ name: payload.name });
   if (existingDivision) {
     throw new Error("A division with this name already exists.");
   }
-  const result = await Division.create(payload);
-  return result;
+  const slugWithPayload = await createSlug(payload, payload.name as string);
+  const division = await Division.create(slugWithPayload);
+  return division;
 };
 const getAllDivision = async () => {
   const result = await Division.find();
@@ -28,8 +30,8 @@ const updateDivision = async (
   payload: Partial<IDivision>,
   decodedToken: JwtPayload
 ) => {
-  const isDivisionAvailable = await Division.findById(id);
-  if (!isDivisionAvailable) {
+  const isDivisionExist = await Division.findById(id);
+  if (!isDivisionExist) {
     throw new AppError(httpStatus.NOT_FOUND, "Division Not found");
   }
 
@@ -51,6 +53,10 @@ const updateDivision = async (
   });
   if (duplicateDivision) {
     throw new Error("A division with this name already exists.");
+  }
+  if (payload.name) {
+    const slugWithPayload = await createSlug(payload, payload.name as string);
+    payload = slugWithPayload;
   }
   const updateDivision = await Division.findByIdAndUpdate(id, payload, {
     new: true,

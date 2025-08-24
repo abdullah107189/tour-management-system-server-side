@@ -1,3 +1,4 @@
+import { createSlug } from "../../utils/createSlug";
 import { ITour, ITourType } from "./tour.interface";
 import { Tour, TourType } from "./tour.model";
 
@@ -40,11 +41,13 @@ const deleteTourType = async (id: string) => {
 // ====================| tour |=================
 
 const createTour = async (payload: ITour) => {
-  const existingTourType = await TourType.findOne({ slug: payload.slug });
+  const existingTourType = await TourType.findOne({ title: payload.title });
+
   if (existingTourType) {
     throw new Error("Tour slug already exists.");
   }
-  return await Tour.create(payload);
+  const slugWithPayload = await createSlug(payload, payload.title);
+  return await Tour.create(slugWithPayload);
 };
 
 const getAllTour = async () => {
@@ -68,6 +71,10 @@ const updateTour = async (id: string, payload: ITour) => {
   const existingTourType = await Tour.findById(id);
   if (!existingTourType) {
     throw new Error("Tour not found");
+  }
+  if (payload.title) {
+    const slugWithPayload = await createSlug(payload, payload.title as string);
+    payload = slugWithPayload;
   }
   const updateTourType = await Tour.findByIdAndUpdate(id, payload, {
     new: true,
