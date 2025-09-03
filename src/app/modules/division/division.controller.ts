@@ -5,10 +5,15 @@ import { divisionServices } from "./division.services";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
+import { IDivision } from "./division.interface";
 
 const createDivision = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await divisionServices.createDivision(req.body);
+    const payload: IDivision = {
+      ...req.body,
+      thumbnail: req.file?.path,
+    };
+    const result = await divisionServices.createDivision(payload);
     sendResponse(res, {
       success: true,
       message: "Division Created Successful",

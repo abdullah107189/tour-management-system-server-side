@@ -34,6 +34,10 @@ interface IEnvVariables {
     SSL_FAIL_FRONTEND_URL: string;
     SSL_CANCEL_FRONTEND_URL: string;
   };
+  // cloudinary
+  cloudinary_cloud_name: string;
+  cloudinary_cloud_api_key: string;
+  cloudinary_cloud_api_secret: string;
 }
 
 const loadEnvVariables = (): IEnvVariables => {
@@ -65,6 +69,10 @@ const loadEnvVariables = (): IEnvVariables => {
     "SSL_SUCCESS_FRONTEND_URL",
     "SSL_FAIL_FRONTEND_URL",
     "SSL_CANCEL_FRONTEND_URL",
+    // cloudinary
+    "cloudinary_cloud_name",
+    "cloudinary_cloud_api_key",
+    "cloudinary_cloud_api_secret",
   ];
   requiredEnvVariables.forEach((key) => {
     if (!process.env[key]) {
@@ -101,6 +109,11 @@ const loadEnvVariables = (): IEnvVariables => {
       SSL_FAIL_FRONTEND_URL: process.env.SSL_FAIL_FRONTEND_URL as string,
       SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONTEND_URL as string,
     },
+    // cloudinary
+    cloudinary_cloud_name: process.env.cloudinary_cloud_name as string,
+    cloudinary_cloud_api_key: process.env.cloudinary_cloud_api_key as string,
+    cloudinary_cloud_api_secret: process.env
+      .cloudinary_cloud_api_secret as string,
   };
 };
 export const envVars = loadEnvVariables();

@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import { TourServices } from "./tour.services";
+import { ITour } from "./tour.interface";
 // =========================| Tour Type |==========================
 const createTourType = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +53,11 @@ const deleteTourType = catchAsync(async (req: Request, res: Response) => {
 
 const createTour = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await TourServices.createTour(req.body);
+    const payload: ITour = {
+      ...req.body,
+      images: (req.files as Express.Multer.File[])?.map((file) => file.path),
+    };
+    const result = await TourServices.createTour(payload);
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
