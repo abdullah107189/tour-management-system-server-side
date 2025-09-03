@@ -35,7 +35,7 @@ router.delete(
 // ================== tour routes ===============
 router.post(
   "/create",
-  // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   multerUpload.array("files"),
   validateRequest(createTourZodSchema),
   TourController.createTour

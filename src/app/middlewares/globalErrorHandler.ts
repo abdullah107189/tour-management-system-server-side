@@ -5,6 +5,7 @@ import { envVars } from "../config/env";
 import AppError from "../errorHelpers/AppError";
 import { ZodError } from "zod";
 import mongoose from "mongoose";
+import { deleteImagesFromCloudinary } from "../config/cloudinary.config";
 const handleErrorDuplicate = (err: any) => {
   const duplicate = err.message.match(/"([^"]*)"/);
   return {
@@ -18,12 +19,21 @@ const handleCastError = (err: mongoose.Error) => {
     message: "Invalid MongoDB ObjectID. Please provide a valid id",
   };
 };
-export const globalErrorHandler = (
+export const globalErrorHandler = async (
   err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  if (req.file) {
+    await deleteImagesFromCloudinary(req.file.path);
+  }
+  if (req.files && req.files.length) {
+    const imageUrls = (req.files as Express.Multer.File[]).map(
+      (file) => file.path
+    );
+    await Promise.all(imageUrls.map((url) => deleteImagesFromCloudinary(url)));
+  }
   let statusCode = 500;
   let message = `Something went wrong!`;
 
@@ -50,7 +60,7 @@ export const globalErrorHandler = (
   res.status(statusCode).json({
     success: false,
     message,
-    err : envVars.NODE_DEV == "development" ? err : null,
+    err: envVars.NODE_DEV == "development" ? err : null,
     stack: envVars.NODE_DEV == "development" ? err.stack : null,
   });
 };
