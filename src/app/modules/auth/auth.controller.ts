@@ -17,13 +17,17 @@ const credentialsLogin = catchAsync(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     passport.authenticate("local", async (err: any, user: any, info: any) => {
       if (err) {
-        return next(new AppError(401, info.message));
+        return next(new AppError(401, err.message));
       }
       if (!user) {
         return next(new AppError(401, info.message));
       }
+      if (user?.isVerified === false) {
+        return next(
+          new AppError(httpStatus.UNAUTHORIZED, "You are not verified")
+        );
+      }
       const userToken = createTokens(user);
-
       const { password: pass, ...rest } = user.toObject();
 
       setAuthCookie(res, userToken);
