@@ -8,6 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 const CreateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    // console.log(req.body);
     const user = await UserServices.CreateUser(req.body);
     sendResponse(res, {
       success: true,
@@ -19,7 +20,6 @@ const CreateUser = catchAsync(
 );
 const GetAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
- 
     const result = await UserServices.GetAllUsers();
     sendResponse(res, {
       success: true,
