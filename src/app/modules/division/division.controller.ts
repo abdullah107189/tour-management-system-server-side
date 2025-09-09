@@ -33,9 +33,13 @@ const getAllDivision = catchAsync(
     });
   }
 );
+
 const updateDivision = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
+    const payload: IDivision = {
+      ...req.body,
+      thumbnail: req.file?.path,
+    };
     const id = req.params.id;
     const verifiedToken = req.user;
     const result = await divisionServices.updateDivision(

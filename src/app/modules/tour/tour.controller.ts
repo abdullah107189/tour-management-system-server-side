@@ -94,8 +94,11 @@ const getSingleTour = catchAsync(
 );
 const updateTour = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const payload: ITour = {
+      ...req.body,
+      images: (req.files as Express.Multer.File[])?.map((file) => file.path),
+    };
     const id = req.params.id;
-    const payload = req.body;
     const result = await TourServices.updateTour(id, payload);
     sendResponse(res, {
       success: true,

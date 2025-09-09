@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { validateRequest } from "../../middlewares/validateRequest";
 import { divisionController } from "./division.controller";
-import { createDivisionZodSchema } from "./division.validation";
+import {
+  createDivisionZodSchema,
+  updateDivisionSchema,
+} from "./division.validation";
 import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "../user/user.interface";
 import { multerUpload } from "../../config/multer";
@@ -27,7 +30,13 @@ router.get(
 router.patch(
   "/:id",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  multerUpload.single("file"),
+  validateRequest(updateDivisionSchema),
   divisionController.updateDivision
 );
-router.delete("/:id", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), divisionController.deleteDivision);
+router.delete(
+  "/:id",
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  divisionController.deleteDivision
+);
 export const DivisionRoutes = router;

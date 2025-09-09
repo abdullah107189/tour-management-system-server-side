@@ -4,12 +4,14 @@ import { IDivision } from "./division.interface";
 import { Division } from "./division.model";
 import httpStatus from "http-status-codes";
 import { Role } from "../user/user.interface";
+import { deleteImagesFromCloudinary } from "../../config/cloudinary.config";
 
 const createDivision = async (payload: Partial<IDivision>) => {
   const existingDivision = await Division.findOne({ name: payload.name });
   if (existingDivision) {
     throw new Error("A division with this name already exists.");
   }
+  console.log(payload);
   const division = await Division.create(payload);
   return division;
 };
@@ -60,6 +62,10 @@ const updateDivision = async (
     new: true,
     runValidators: true,
   });
+  
+  if (payload.thumbnail && isDivisionExist.thumbnail) {
+    await deleteImagesFromCloudinary(isDivisionExist.thumbnail);
+  }
 
   return updateDivision;
 };

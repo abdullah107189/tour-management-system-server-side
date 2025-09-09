@@ -38,6 +38,11 @@ interface IEnvVariables {
   cloudinary_cloud_name: string;
   cloudinary_cloud_api_key: string;
   cloudinary_cloud_api_secret: string;
+  // RADIS
+  REDIS_USERNAME: string;
+  REDIS_PASSWORD: string;
+  REDIS_HOST: string;
+  REDIS_PORT: string;
 }
 
 const loadEnvVariables = (): IEnvVariables => {
@@ -73,6 +78,11 @@ const loadEnvVariables = (): IEnvVariables => {
     "cloudinary_cloud_name",
     "cloudinary_cloud_api_key",
     "cloudinary_cloud_api_secret",
+    // redis
+    "REDIS_USERNAME",
+    "REDIS_PASSWORD",
+    "REDIS_HOST",
+    "REDIS_PORT",
   ];
   requiredEnvVariables.forEach((key) => {
     if (!process.env[key]) {
@@ -114,6 +124,12 @@ const loadEnvVariables = (): IEnvVariables => {
     cloudinary_cloud_api_key: process.env.cloudinary_cloud_api_key as string,
     cloudinary_cloud_api_secret: process.env
       .cloudinary_cloud_api_secret as string,
+
+    // redis
+    REDIS_USERNAME: process.env.REDIS_USERNAME as string,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
+    REDIS_HOST: process.env.REDIS_HOST as string,
+    REDIS_PORT: process.env.REDIS_PORT as string,
   };
 };
 export const envVars = loadEnvVariables();
