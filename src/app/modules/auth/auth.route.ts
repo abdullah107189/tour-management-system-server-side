@@ -13,19 +13,25 @@ router.post(
   checkAuth(...Object.values(Role)),
   AuthController.resetPassword
 );
-router.get(
-  "/google",
- AuthController.openGoogle
+router.post(
+  "/change-password",
+  checkAuth(...Object.values(Role)),
+  AuthController.changePassword
 );
+router.post(
+  "/set-password",
+  checkAuth(...Object.values(Role)),
+  AuthController.setPassword
+);
+router.get("/google", AuthController.openGoogle);
 
 // api/v1/auth/google/callback?state=/booking
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: '/login'}),
+    failureRedirect: "/login",
+  }),
   AuthController.googleCallbackController
 );
 
 export const AuthRoutes = router;
-
-
