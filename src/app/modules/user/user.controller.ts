@@ -30,6 +30,19 @@ const GetAllUsers = catchAsync(
     });
   }
 );
+const GetMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (req.user as JwtPayload).userId;
+    const result = await UserServices.GetMe(userId);
+    sendResponse(res, {
+      success: true,
+      message: "All Users Retrieved Successfully",
+      statusCode: httpStatus.CREATED,
+      data: result,
+      
+    });
+  }
+);
 const UpdateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
@@ -51,6 +64,7 @@ const UpdateUser = catchAsync(
 
 export const userController = {
   CreateUser,
+  GetMe,
   GetAllUsers,
   UpdateUser,
 };

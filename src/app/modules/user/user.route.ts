@@ -13,6 +13,11 @@ router.post(
   userController.CreateUser
 );
 router.get(
+  "/me",
+  checkAuth(...Object.values(Role)),
+  userController.GetMe
+);
+router.get(
   "/all-users",
   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
   userController.GetAllUsers
