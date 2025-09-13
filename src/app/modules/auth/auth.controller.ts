@@ -127,6 +127,19 @@ const setPassword = catchAsync(
     });
   }
 );
+const forgetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload;
+    const password = req.body.password;
+    await AuthServices.forgetPassword(decodedToken.userId, password);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Password Reset Successfully",
+      data: null,
+    });
+  }
+);
 
 const openGoogle = async (req: Request, res: Response, next: NextFunction) => {
   const redirect = req.query.redirect || "/";
@@ -158,6 +171,7 @@ export const AuthController = {
   changePassword,
   resetPassword,
   setPassword,
+  forgetPassword,
   openGoogle,
   googleCallbackController,
 };

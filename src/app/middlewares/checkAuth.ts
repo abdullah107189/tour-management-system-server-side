@@ -28,6 +28,9 @@ export const checkAuth =
       if (!existingUser) {
         throw new AppError(httpStatus.BAD_REQUEST, "Email don't exists.");
       }
+      if (!existingUser.isVerified) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User don't verified.");
+      }
       if (existingUser.isDeleted) {
         throw new AppError(httpStatus.BAD_REQUEST, "User is Deleted");
       }

@@ -26,7 +26,7 @@ const GetAllUsers = catchAsync(
       message: "All Users Retrieved Successfully",
       statusCode: httpStatus.CREATED,
       data: result.data,
-      meta: result.meta,
+      meta: { total: result.meta.total },
     });
   }
 );
@@ -39,7 +39,6 @@ const GetMe = catchAsync(
       message: "All Users Retrieved Successfully",
       statusCode: httpStatus.CREATED,
       data: result,
-      
     });
   }
 );

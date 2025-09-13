@@ -23,6 +23,11 @@ router.post(
   checkAuth(...Object.values(Role)),
   AuthController.setPassword
 );
+router.post(
+  "/forget-password",
+  checkAuth(...Object.values(Role)),
+  AuthController.forgetPassword
+);
 router.get("/google", AuthController.openGoogle);
 
 // api/v1/auth/google/callback?state=/booking

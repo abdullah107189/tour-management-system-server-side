@@ -93,10 +93,39 @@ const setPassword = async (userId: string, plainPassword: string) => {
   await user.save();
   console.log(user);
 };
+const forgetPassword = async (userId: string, plainPassword: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+  if (
+    user.password &&
+    user.auths.some((providerObject) => providerObject.provider == "google")
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You have already set your password. Now you can change the password from your profile password update"
+    );
+  }
+  const hashedPassword = await bcryptjs.hash(
+    plainPassword,
+    Number(envVars.bcrypt_salt_round)
+  );
+  const credentialsProvider: IAuthProvider = {
+    provider: "credentials",
+    providerId: user.email,
+  };
+  const auths: IAuthProvider[] = [...user.auths, credentialsProvider];
+  user.password = hashedPassword;
+  user.auths = auths;
+  await user.save();
+  console.log(user);
+};
 export const AuthServices = {
   credentialsLogin,
   getNewAccessToken,
   changePassword,
   resetPassword,
   setPassword,
+  forgetPassword,
 };

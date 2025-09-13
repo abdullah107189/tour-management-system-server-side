@@ -7,7 +7,7 @@ import {
 } from "passport-google-oauth20";
 import { envVars } from "./env";
 import { User } from "../modules/user/user.model";
-import { Role } from "../modules/user/user.interface";
+import { IsActive, Role } from "../modules/user/user.interface";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcryptjs from "bcryptjs";
 // GOOGLE
@@ -30,6 +30,7 @@ passport.use(
           return done(null, false, { message: "No get email" });
         }
         let user = await User.findOne({ email });
+
         if (!user) {
           user = await User.create({
             email,
@@ -61,6 +62,25 @@ passport.use(
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
           return done(null, false, { message: "User don't exist" });
+        }
+
+        if (!existingUser.isVerified) {
+          // throw new AppError(httpStatus.BAD_REQUEST, "User don't verified.");
+          return done("User don't verified.");
+        }
+        if (existingUser.isDeleted) {
+          // throw new AppError(httpStatus.BAD_REQUEST, "User is Deleted");
+          return done("User is Deleted");
+        }
+        if (
+          existingUser.isActive === IsActive.BLOCKED ||
+          existingUser.isActive === IsActive.INACTIVE
+        ) {
+          // throw new AppError(
+          //   httpStatus.BAD_REQUEST,
+          //   `User is ${existingUser.isActive}`
+          // );
+          return done(`User is ${existingUser.isActive}`);
         }
         const isGoogleAuthenticate = existingUser.auths.some(
           (providerObjects) => providerObjects.provider == "google"
