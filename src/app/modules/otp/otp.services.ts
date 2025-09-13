@@ -15,6 +15,11 @@ const generateOtp = (length = 6) => {
 };
 
 const sendOTP = async (email: string, name: string) => {
+  const user = await User.findOne({ email, isVerified: false });
+  if (!user) {
+    throw new AppError(404, "User don't exist");
+  }
+  
   const otp = generateOtp();
   const redisKey = `otp:${email}`;
   await redisClient.set(redisKey, otp, {
@@ -32,6 +37,10 @@ const sendOTP = async (email: string, name: string) => {
 };
 
 const verifyOTP = async (email: string, otp: string) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError(404, "User don't exist");
+  }
   const redisKey = `otp:${email}`;
   const savedOtp = await redisClient.get(redisKey);
   if (!savedOtp) {
@@ -42,7 +51,7 @@ const verifyOTP = async (email: string, otp: string) => {
   }
   await Promise.all([
     User.updateOne({ email }, { isVerified: true }, { runValidators: true }),
-    redisClient.del([redisKey])
+    redisClient.del([redisKey]),
   ]);
 };
 
