@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { redisClient } from "../../config/redis.config";
+import { sendEmail } from "../../utils/sendEmail";
 const OTP_EXPIRATION = 2 * 60; // 2minute
 
 const generateOtp = (length = 6) => {
@@ -23,7 +24,7 @@ const sendOTP = async (email: string, name: string) => {
     templateName: "otp",
     templateData: {
       name: name,
-      email: email,
+      otp: otp,
     },
   });
 };

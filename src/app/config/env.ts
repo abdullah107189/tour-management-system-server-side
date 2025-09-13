@@ -39,10 +39,12 @@ interface IEnvVariables {
   cloudinary_cloud_api_key: string;
   cloudinary_cloud_api_secret: string;
   // RADIS
-  REDIS_USERNAME: string;
-  REDIS_PASSWORD: string;
-  REDIS_HOST: string;
-  REDIS_PORT: string;
+  REDIS: {
+    REDIS_USERNAME: string;
+    REDIS_PASSWORD: string;
+    REDIS_HOST: string;
+    REDIS_PORT: string;
+  };
   EMAIL_SENDER: {
     SMTP_USER: string;
     SMTP_PASS: string;
@@ -139,10 +141,12 @@ const loadEnvVariables = (): IEnvVariables => {
       .cloudinary_cloud_api_secret as string,
 
     // redis
-    REDIS_USERNAME: process.env.REDIS_USERNAME as string,
-    REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
-    REDIS_HOST: process.env.REDIS_HOST as string,
-    REDIS_PORT: process.env.REDIS_PORT as string,
+    REDIS: {
+      REDIS_USERNAME: process.env.REDIS_USERNAME as string,
+      REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
+      REDIS_HOST: process.env.REDIS_HOST as string,
+      REDIS_PORT: process.env.REDIS_PORT as string,
+    },
     EMAIL_SENDER: {
       SMTP_USER: process.env.SMTP_USER as string,
       SMTP_PASS: process.env.SMTP_PASS as string,

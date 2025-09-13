@@ -24,7 +24,7 @@ interface ISendEmailOption {
     filename: string;
     content: Buffer | string;
     contentType: string;
-  };
+  }[];
 }
 export const sendEmail = async ({
   to,
