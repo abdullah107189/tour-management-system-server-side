@@ -30,7 +30,24 @@ passport.use(
           return done(null, false, { message: "No get email" });
         }
         let user = await User.findOne({ email });
+        if (user && !user.isVerified) {
+          user.isVerified = true;
+          await user.save();
+        }
 
+        if (
+          user &&
+          (user.isActive === IsActive.BLOCKED ||
+            user.isActive === IsActive.INACTIVE)
+        ) {
+          // throw new AppError(httpStatus.BAD_REQUEST, `User is ${user.isActive}`)
+          done(`User is ${user.isActive}`);
+        }
+
+        if (user && user.isDeleted) {
+          return done(null, false, { message: "User is deleted" });
+          // done("User is deleted")
+        }
         if (!user) {
           user = await User.create({
             email,
