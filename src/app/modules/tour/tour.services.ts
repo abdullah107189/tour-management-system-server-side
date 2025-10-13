@@ -217,11 +217,26 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
 
   return updatedTour;
 };
+// const deleteTour = async (id: string) => {
+//   const isFind = await Tour.findById(id);
+//   if (!isFind) {
+//     throw new Error("Tour don't exists.");
+//   }
+//   return await Tour.findByIdAndDelete(id);
+// };
+
 const deleteTour = async (id: string) => {
   const isFind = await Tour.findById(id);
+
   if (!isFind) {
     throw new Error("Tour don't exists.");
   }
+  if (isFind.images && isFind.images.length > 0) {
+    await Promise.all(
+      isFind.images.map((url) => deleteImagesFromCloudinary(url))
+    );
+  }
+
   return await Tour.findByIdAndDelete(id);
 };
 export const TourServices = {
